@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import {
     Text,
     StyleSheet,
@@ -6,30 +5,33 @@ import {
     TouchableOpacity,
     View,
     Image,
+    FlatList
 } from 'react-native';
-import PropTypes from 'prop-types';
-import { Colors, Fonts } from '../../constants';
 
-export class Category extends Component {
-    render() {
-        const {
-            title,
-        } = this.props
-        return (
-            <TouchableOpacity>
-                <Text>
-                    {title.toUpperCase()}
-                </Text>
-            </TouchableOpacity>
-        )
-    }
+const Category = (props) => {
+    return(
+        <Text style={styles.category}>
+            {props.name}
+        </Text>
+    );
 }
 
 const styles = StyleSheet.create({
     category: {
-      flex: 1,
-      backgroundColor: '#202124',
-      alignItems: 'center',
-      justifyContent: 'center',
+        fontFamily: 'Manrope',
+        fontSize: 35,
+        color: "white",
+        backgroundColor: "#0e0e0f",
+        
+        padding: 15,
+        margin: 7,
+        textAlign: 'center',
+
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
-  });
+  })
+
+export default Category
