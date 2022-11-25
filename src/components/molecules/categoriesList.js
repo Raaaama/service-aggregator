@@ -1,10 +1,5 @@
 import {
-    Text,
     StyleSheet,
-    ActivityIndicator,
-    TouchableOpacity,
-    View,
-    Image,
     FlatList,
     Dimensions
 } from 'react-native';
@@ -13,13 +8,11 @@ import Category from "../atoms/Category"
 
 var width = Dimensions.get('window').width;
 
-ip = "192.168.1.64"
-
-const CategoriesList = () => {
+const CategoriesList = (props) => {
     const [categories, setCategories] = useState([]);
     const getCategories = async () => {
        try {
-        const response = await fetch('http://' + ip + ':8082/api/categories');
+        const response = await fetch('http://' + props.ip + ':8082/api/categories');
         const json = await response.json();
         setCategories(json);
       } catch (error) {

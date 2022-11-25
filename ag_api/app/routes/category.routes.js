@@ -6,7 +6,6 @@ module.exports = app => {
   // Retrieve all Categories
   router.get("/", categories.findAll);
   
-  
   // Create a new Category
   router.post("/", categories.create);
 

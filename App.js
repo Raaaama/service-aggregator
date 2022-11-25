@@ -4,10 +4,11 @@ import {
   TouchableOpacity,
   Text,
   View,
-  SafeAreaView,
+  StatusBar,
 } from 'react-native'
 import { registerRootComponent } from 'expo';
 import CategoriesList from "./src/components/molecules/CategoriesList"
+import LogInModal from "./src/components/organisms/LogInModal"
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
@@ -16,14 +17,17 @@ const fonts = () => Font.loadAsync({
   'Manrope-Medium': require('./src/assets/fonts/Manrope-Medium.ttf')
 });
 
+ip = "192.168.1.64"
+
 const App = () => {
   const [font, setFont] = useState(false);
-
     if (font) {
       return (
-        <SafeAreaView style={styles.container}>
-          <CategoriesList />
-        </SafeAreaView>
+        <View style={styles.container}>
+          {/* <StatusBar backgroundColor="black"/> */}
+          <CategoriesList ip = {ip}/>
+          <LogInModal ip={ip}/>
+        </View>
       )
     }
     else {
@@ -39,7 +43,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:"10%",
+    //marginTop:"10%",
     flex: 1,
     backgroundColor: '#202124',
     alignItems: 'center',
