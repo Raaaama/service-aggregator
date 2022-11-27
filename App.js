@@ -11,6 +11,7 @@ import CategoriesList from "./src/components/molecules/CategoriesList"
 import LogInModal from "./src/components/organisms/LogInModal"
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { AppProvider } from './src/context/LogInContext';
 
 const fonts = () => Font.loadAsync({
   'Manrope': require('./src/assets/fonts/Manrope-Bold.ttf'),
@@ -23,11 +24,13 @@ const App = () => {
   const [font, setFont] = useState(false);
     if (font) {
       return (
-        <View style={styles.container}>
-          {/* <StatusBar backgroundColor="black"/> */}
-          <CategoriesList ip = {ip}/>
-          <LogInModal ip={ip}/>
-        </View>
+        <AppProvider>
+          <View style={styles.container}>
+            {/* <StatusBar backgroundColor="black"/> */}
+            <CategoriesList ip = {ip}/>
+            <LogInModal ip={ip}/>
+          </View>
+        </AppProvider>
       )
     }
     else {

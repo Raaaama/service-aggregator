@@ -1,30 +1,38 @@
-import { useState, useEffect, createContext } from "react";
-import { Text, StatusBar, View, StyleSheet, Modal, TextInput, TouchableOpacity } from "react-native";
+import { useState, useEffect, createContext, useContext } from "react";
+import {
+  Text,
+  StatusBar,
+  View,
+  StyleSheet,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import LogInForm from "../molecules/LogInForm";
+import LogInContext from "../../context/LogInContext";
 
 const LogInModal = (props) => {
   const [LogInModalVisible, setLogInModalVisible] = useState(true);
-  const [emadress, changeEmadress] = useState("");
-  const [password, changePassword] = useState("");
 
-  const handleClick = async(val) => {
+  const { emadress, password } = useContext(LogInContext);
+
+  const handleClick = async () => {
     try {
-        const response = await fetch('http://' + props.ip + ':8082/api/users?emadress=' + emadress + '&password=' + password + '');
-        const json = await response.json();
-        if (json[0]['count(username)'] == 1) {
-            setLogInModalVisible(false);
-        }
-      } catch (error) {
-        console.error(error);
+      const response = await fetch(
+        "http://" +
+          props.ip +
+          ":8082/api/users?emadress=" +
+          emadress +
+          "&password=" +
+          password
+      );
+      const json = await response.json();
+      if (json[0]["count(username)"] == 1) {
+        setLogInModalVisible(false);
       }
-  };
-
-  const handleEmadressChange = val => {
-    changeEmadress(val);
-  };
-
-  const handlePasswordChange = val => {
-    changePassword(val);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -34,14 +42,10 @@ const LogInModal = (props) => {
       presentationStyle={"fullScreen"}
       //onRequestClose={() => clearFilter(0)}
     >
-        <StatusBar backgroundColor="white"/>
-        <View style={styles.container}>
-            <LogInForm 
-            handleClick={handleClick} 
-            handleEmadressChange={handleEmadressChange} 
-            handlePasswordChange={handlePasswordChange}
-            emadress={emadress} password={password}/>
-        </View>
+      <StatusBar backgroundColor="white" />
+      <View style={styles.container}>
+        <LogInForm handleClick={handleClick} />
+      </View>
     </Modal>
   );
 };
