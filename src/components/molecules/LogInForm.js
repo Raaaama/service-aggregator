@@ -12,8 +12,13 @@ const LogInForm = (props) => {
       <Input handle={setPassword} secured={true} placeholder={"password"} />
       <TouchableOpacity
         style={styles.LogInButton}
-        onPress={() => props.handleClick()}>
+        onPress={() => props.handleLogIn()}>
         <Text style={styles.LogInButtonTxt}>Log In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.LogInButton}
+        onPress={() => props.handleSignUp(true)}>
+        <Text style={styles.LogInButtonTxt}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -28,6 +33,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 80,
     backgroundColor: "#0e0e0f",
+    borderWidth: 1,
+    borderColor: 'white',
   },
   LogInButtonTxt: {
     fontSize: 25,

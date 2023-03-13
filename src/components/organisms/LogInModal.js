@@ -10,24 +10,28 @@ import {
 } from "react-native";
 import LogInForm from "../molecules/LogInForm";
 import LogInContext from "../../context/LogInContext";
+import SignUpModal from "./SignUpModal";
+import { Base64 } from 'js-base64';
 
 const LogInModal = (props) => {
+
   const [LogInModalVisible, setLogInModalVisible] = useState(true);
+  const [signUpModalVisible, setSignUpModalVisible] = useState(false);
 
-  const { emadress, password } = useContext(LogInContext);
+  const { emadress, password, ip, setUid } = useContext(LogInContext);
 
-  const handleClick = async () => {
+  const handleLogIn = async () => {
     try {
       const response = await fetch(
-        "http://" +
-          props.ip +
-          ":8082/api/users?emadress=" +
+          ip +
+          "/api/users?emadress=" +
           emadress +
           "&password=" +
-          password
+          Base64.encode(password)
       );
       const json = await response.json();
-      if (json[0]["count(username)"] == 1) {
+      if (json[0] != undefined) {
+        setUid(json[0])
         setLogInModalVisible(false);
       }
     } catch (error) {
@@ -40,11 +44,12 @@ const LogInModal = (props) => {
       animationType="slide"
       visible={LogInModalVisible}
       presentationStyle={"fullScreen"}
-      //onRequestClose={() => clearFilter(0)}
+      onRequestClose={() => setLogInModalVisible(false)}
     >
+      <SignUpModal vb={signUpModalVisible} handleSignUp={setSignUpModalVisible}/>
       <StatusBar backgroundColor="white" />
       <View style={styles.container}>
-        <LogInForm handleClick={handleClick} />
+        <LogInForm handleLogIn={handleLogIn} handleSignUp={() => setSignUpModalVisible()} />
       </View>
     </Modal>
   );

@@ -1,56 +1,87 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState } from "react";
 import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
-  StatusBar,
-} from 'react-native'
-import { registerRootComponent } from 'expo';
-import CategoriesList from "./src/components/molecules/CategoriesList"
-import LogInModal from "./src/components/organisms/LogInModal"
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import { AppProvider } from './src/context/LogInContext';
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    View,
+    StatusBar,
+} from "react-native";
 
-const fonts = () => Font.loadAsync({
-  'Manrope': require('./src/assets/fonts/Manrope-Bold.ttf'),
-  'Manrope-Medium': require('./src/assets/fonts/Manrope-Medium.ttf')
-});
+import { registerRootComponent } from "expo";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AppProvider } from "./src/context/LogInContext";
 
-ip = "192.168.1.64"
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
+
+import HomeScreen from "./src/screens/HomeScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import SearchScreen from "./src/screens/SearchScreen";
+
+const fonts = () =>
+    Font.loadAsync({
+        Manrope: require("./src/assets/fonts/Manrope-Bold.ttf"),
+        "Manrope-Medium": require("./src/assets/fonts/Manrope-Medium.ttf"),
+    });
+
+
+ip = "https://3da3-2-135-26-114.eu.ngrok.io";
+//ip = "192.168.1.64";
+//ip = "192.168.137.135"
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [font, setFont] = useState(false);
+    const [font, setFont] = useState(false);
     if (font) {
-      return (
-        <AppProvider>
-          <View style={styles.container}>
-            {/* <StatusBar backgroundColor="black"/> */}
-            <CategoriesList ip = {ip}/>
-            <LogInModal ip={ip}/>
-          </View>
-        </AppProvider>
-      )
+        return (
+            <AppProvider>
+                <NavigationContainer>
+                    <Stack.Navigator>
+                        <Stack.Screen
+                            name="Home"
+                            component={HomeScreen}
+                            options={{
+                                headerTitle: "",
+                                headerTransparent: true,
+                                animation:'none',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="Search"
+                            component={SearchScreen}
+                            options={{
+                                headerTitle: "",
+                                headerTransparent: true,
+                                animation:'none',
+                            }}
+                            header={{
+                                back: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="Profile"
+                            component={ProfileScreen}
+                            options={{
+                                headerTitle: "",
+                                headerTransparent: true,
+                                animation:'none',
+                            }}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </AppProvider>
+        );
+    } else {
+        return (
+            <AppLoading
+                startAsync={fonts}
+                onFinish={() => setFont(true)}
+                onError={console.error}
+            />
+        );
     }
-    else {
-      return (
-        <AppLoading 
-          startAsync={fonts} 
-          onFinish={() => setFont(true)}
-          onError = {console.error}
-        />
-      );
-    }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    //marginTop:"10%",
-    flex: 1,
-    backgroundColor: '#202124',
-    alignItems: 'center',
-  },
-})
+};
 
 export default App;

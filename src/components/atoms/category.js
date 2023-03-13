@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from "react-native";
 
-const Category = (props) => {
+function Category(props) {
   return <Text style={styles.category}>{props.name}</Text>;
 };
 

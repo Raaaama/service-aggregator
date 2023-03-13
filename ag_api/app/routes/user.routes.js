@@ -5,5 +5,7 @@ module.exports = app => {
 
   router.get("/", users.logIn);
 
+  router.post("/", users.add);
+
   app.use("/api/users", router);
 };
