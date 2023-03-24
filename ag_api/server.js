@@ -24,7 +24,11 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/category.routes.js")(app);
+require("./app/routes/subcategory.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/servicetype.routes")(app);
+require("./app/routes/provider.routes")(app);
+require("./app/routes/image.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8082;

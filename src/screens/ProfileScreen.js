@@ -13,8 +13,8 @@ const ProfileScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="black" />
-            <Text style={styles.txt}>Мои записи</Text>
-            <Footer navigation={navigation} />
+            {/* <Text style={styles.txt}>Мои записи</Text> */}
+            {/* <Footer navigation={navigation} /> */}
         </View>
     );
 };

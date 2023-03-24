@@ -13,8 +13,8 @@ const SearchScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar/>
-            <Text style={styles.txt}>Поиск</Text>
-            <Footer navigation={navigation} />
+            {/* <Text style={styles.txt}>Поиск</Text> */}
+            {/* <Footer navigation={navigation} /> */}
         </View>
     );
 };

@@ -1,24 +1,42 @@
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useContext } from "react";
+import LogInContext from "../../context/LogInContext";
+import {ExpandableListView} from 'react-native-expandable-listview';
+
+
 
 function Category(props) {
-  return <Text style={styles.category}>{props.name}</Text>;
+  const { categories, setIdCat, getSubcategories, setSubcategoriesModalVisible } = useContext(LogInContext);
+
+  function showSubcategory() {
+    setIdCat(props.id);
+    getSubcategories(props.id);
+    setSubcategoriesModalVisible(true);
+
+  }
+  
+  return (
+    <TouchableOpacity onPress={showSubcategory}>
+      <Text style={styles.category}>{props.name}</Text>
+    </TouchableOpacity>
+  )
 };
 
 const styles = StyleSheet.create({
   category: {
     fontFamily: "Manrope",
-    fontSize: 35,
+    fontSize: 30,
     color: "white",
-    backgroundColor: "#0e0e0f",
+    backgroundColor: "black",
 
     padding: 15,
     margin: 7,
     textAlign: "center",
 
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
 });
 
