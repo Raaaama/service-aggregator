@@ -21,7 +21,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 var width = Dimensions.get("window").width;
 
 const ServiceTypeModal = (props) => {
-  const { serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, subcategoryTitle, getProviders, setProvidersModalVisible, setServiceTypeTitle } =
+  const { serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, subcategoryTitle, getProviders, setProvidersModalVisible, setServiceTypeTitle, } =
     useContext(LogInContext);
 
   function handleServiceType(item) {

@@ -6,10 +6,11 @@ import LogInContext from "../../context/LogInContext";
 const ProviderCard = (props) => {
 
   const {
-    setProviderPageModalVisible, getImages
+    setProviderPageModalVisible, getImages, currentServiceType, getProviderInfo
   } = useContext(LogInContext);
 
   function handleF(id) {
+    getProviderInfo([id, currentServiceType]);
     getImages(id);
     setProviderPageModalVisible(true);
   }
@@ -32,7 +33,10 @@ const ProviderCard = (props) => {
             </Svg>
             <Text style={styles.timePerService}>{props.timePerService} минут</Text>
           </View>
+          <View style={{flexDirection: "row"}}>
+          <Text style={styles.from}>от</Text>
           <Text style={styles.price}>{props.price}₸</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -82,6 +86,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "white",
     fontFamily: "Manrope",
+  },
+  from: {
+    fontSize: 10,
+    color: "white",
+    fontFamily: "Manrope",
+    alignSelf: "flex-end",
+    marginRight: 5,
+    marginBottom: 5
   },
   price: {
     fontSize: 25,

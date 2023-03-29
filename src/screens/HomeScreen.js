@@ -6,6 +6,7 @@ import Footer from "../components/molecules/Footer";
 import ServiceTypeModal from "../components/organisms/ServiceTypeModal";
 import ProvidersModal from "../components/organisms/ProvidersModal";
 import ProviderPageModal from "../components/organisms/ProviderPageModal";
+import EnrollmentModal from "../components/organisms/EnrollmentModal";
 import { useState } from "react";
 
 const HomeScreen = ({ navigation }) => {
@@ -17,6 +18,7 @@ const HomeScreen = ({ navigation }) => {
       <ServiceTypeModal />
       <ProvidersModal />
       <ProviderPageModal/>
+      <EnrollmentModal/>
     </View>
   );
 };

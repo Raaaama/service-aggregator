@@ -28,10 +28,6 @@ const fonts = () =>
     "Manrope-Medium": require("./src/assets/fonts/Manrope-Medium.ttf"),
   });
 
-// ip = "https://1e54-2-135-26-114.eu.ngrok.io/";
-//ip = "192.168.1.64";
-//ip = "192.168.137.135"
-
 enableScreens();
 const Stack = createNativeStackNavigator();
 

@@ -24,12 +24,10 @@ Provider.getAll = (id, result) => {
   });
 };
 
-Provider.getOne = (id, result) => {
-  let query = "select a.idprovider, c.idservices, a.name, a.adress, c.price, c.timePerService from providers a, services c where a.idprovider = c.idpro";
-
-  if (id) {
-    query += ` and a.idprovider = ${id}`;
-  }
+Provider.getOne = ([idp,idst], result) => {
+  let query = "select a.idprovider, c.idservices, b.idservice_type, a.name, a.adress, c.price, c.timePerService, c.description from providers a, service_types b, services c where a.idprovider = c.idpro and b.idservice_type = c.idst";
+  query += ` and a.idprovider = ${idp}`;
+  query += `  and b.idservice_type = ${idst}`;
 
   sql.query(query, (err, res) => {
     if (err) {

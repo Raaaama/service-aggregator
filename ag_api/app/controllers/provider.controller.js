@@ -14,9 +14,10 @@ exports.findAll = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-  const id = req.query.idst;
+  const idp = req.query.idp;
+  const idst = req.query.idst;
 
-  Provider.getOne(id, (err, data) => {
+  Provider.getOne([idp, idst], (err, data) => {
     if (err)
       res.status(500).send({
         message:
