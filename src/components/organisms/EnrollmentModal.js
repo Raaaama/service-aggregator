@@ -67,18 +67,22 @@ const EnrollmentModal = () => {
     options,
     getTimetable,
     timeOptions,
+    setTimeOptions,
     getEnrollments,
-    enrollments,
+    enroll,
+    getTO
   } = useContext(LogInContext);
 
   const [markedDates, setMarkedDates] = useState({});
   const [current, setCurrent] = useState();
   const [defaultDateStyle, setDefaultDateStyle] = useState(true);
   const [dateTxt, setDateTxt] = useState(undefined);
+  const [dateString, setDateString] = useState();
   const [buttonText, setButtonText] = useState("Опция");
   const [optionIsPicked, setOptionIsPicked] = useState(false);
   const [dayIsPicked, setDayIsPicked] = useState(false);
   const [optionPicked, setOptionPicked] = useState();
+  const [enrollTimeChosen, chooseEnrollTime] = useState([]);
 
   useEffect(() => {
     setButtonText(options[0].optionname);
@@ -144,32 +148,66 @@ const EnrollmentModal = () => {
   function chooseDate(day) {
     setDefaultDateStyle(false);
     var dt = new Date(day.dateString);
+    setDateString(day.dateString);
     setDateTxt(dt.getDay() + 1);
-    handleTimetable(undefined, dt.getDay() + 1);
+    handleTimetable(undefined, dt.getDay() + 1, dt);
   }
 
   function handleOption(index) {
-    setOptionIsPicked(true);
+    // setOptionIsPicked(true);
     setOptionPicked(options[index].idoption);
-    handleTimetable(options[index].idoption, undefined);
+    handleTimetable(options[index].idoption, undefined, undefined);
   }
 
-  function handleTimetable(id, dt) {
-    let ido, d;
+  function addZero(a) {
+    if (a < 10) {
+      a = "0" + a
+    }
+    return a
+  }
+
+  function handleTimetable(id, day, date) {
     if (id == undefined) {
-      ido = optionPicked;
-    } else {
-      ido = id;
+      id = optionPicked;
     }
-    if (dt == undefined) {
-      d = dateTxt;
-    } else {
-      d = dt;
+    if (day == undefined) {
+      day = dateTxt;
     }
-    if (ido != undefined && d != undefined) {
-      getEnrollments(current);
-      getTimetable(ido, d);
+    if (date == undefined) {
+      date = current
     }
+    else {
+      date = date.getFullYear() + "-" + addZero(date.getMonth() + 1) + "-" + addZero(date.getDate())
+    }
+    if (id != undefined && day != undefined && date != undefined) {
+      getTO(id, day, date);
+    }
+  }
+
+  let ops = timeOptions;
+
+  let chooseMultiple = false;
+  const [ed, setEd] = useState(1);
+  function itemChosen(item) {
+    let temp = ops.findIndex(el => el.time == item.time)
+    if (chooseMultiple == false) {
+      for (let i = 0; i < ops.length; i++) {
+        ops[i].chosen = false
+      }
+    }
+    ops[temp].chosen = !ops[temp].chosen;
+    setEd(ed + 1);
+  }
+
+  function handleEnroll() {
+    enroll(ops, dateString, optionPicked)
+    ops.length = 0
+    setOptionIsPicked(false);
+    setOptionPicked(undefined);
+    setCurrent(undefined)
+    setMarkedDates({})
+    setTimeOptions([])
+    ops = []
   }
 
   return (
@@ -219,7 +257,6 @@ const EnrollmentModal = () => {
             });
             chooseDate(day);
             setCurrent(day.dateString);
-            setDayIsPicked(true);
           }}
           enableSwipeMonths={true}
           minDate={getCurrentDate()}
@@ -248,7 +285,7 @@ const EnrollmentModal = () => {
           defaultButtonText={buttonText}
           buttonStyle={{
             width: "80%",
-            marginTop: "30%",
+            margin: "10%",
             backgroundColor: "black",
           }}
           buttonTextStyle={{
@@ -282,14 +319,31 @@ const EnrollmentModal = () => {
           dropdownIconPosition={"left"}
         />
 
-        <TimePicker
+        {/* <TimePicker
           optionIsPicked={optionIsPicked}
           dayIsPicked={dayIsPicked}
           timeOptions={timeOptions}
+        /> */}
+
+        <FlatList
+          // contentContainerStyle={styles.subcategoriesList}
+          // style={{width:"90%"}}
+          data={ops}
+          // horizontal={true}
+          numColumns={5}
+          directionalLockEnabled={true}
+          alwaysBounceVertical={false}
+          //extraData={fromFilter}
+          extraData={[ed, timeOptions, ops]}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={item.chosen ? styles.timeOptionChosen : styles.timeOption} onPress={() => itemChosen(item)}>
+              <Text key={item.time} style={item.chosen ? styles.timeOptionChosenTxt : styles.timeOptionTxt}>{item.time}</Text>
+            </TouchableOpacity>
+          )}
         />
 
-        <TouchableOpacity style={styles.enrollBtn}>
-          <Text style={styles.enrollTxt}>Записаться</Text>
+        <TouchableOpacity style={styles.enrollBtn} onPress={() => handleEnroll(ops, dateString)}>
+          <Text style={styles.enrollTxt}>Отправить заявку</Text>
         </TouchableOpacity>
       </View>
     </Modal>
@@ -318,7 +372,9 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
   },
   enrollBtn: {
-    marginTop: "20%",
+    // marginTop: "20%",
+    position: "absolute",
+    bottom: "2%",
     backgroundColor: "black",
     width: "80%",
     height: "8%",
@@ -331,6 +387,28 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope",
     alignSelf: "center",
   },
+  timeOptionChosen: {
+    backgroundColor: "white",
+    padding: 12,
+    margin: 6,
+    borderRadius: 5
+  },
+  timeOption: {
+    backgroundColor: "black",
+    padding: 12,
+    margin: 6,
+    borderRadius: 5
+  },
+  timeOptionChosenTxt: {
+    fontSize: 16,
+    color: "black",
+    fontFamily: "Manrope"
+  },
+  timeOptionTxt: {
+    fontSize: 16,
+    color: "white",
+    fontFamily: "Manrope"
+  }
 });
 
 export default EnrollmentModal;

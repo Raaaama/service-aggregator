@@ -43,14 +43,14 @@ const App = () => {
           initialRouteName="HomeScreen"
           backBehavior="initialRoute"
           screenOptions={{
-             tabBarLabelStyle: { fontSize: 18, fontFamily:"Manrope" },
+             tabBarLabelStyle: { fontSize: 16, fontFamily:"Manrope" },
              tabBarStyle: { backgroundColor: 'black', },
              tabBarActiveTintColor: 'white',
              tabBarPressColor: 'white',
           }}>
-            <Tab.Screen name="Поиск" component={SearchScreen} />
-            <Tab.Screen name="Запись" component={HomeScreen} />
-            <Tab.Screen name="Профиль" component={ProfileScreen} />
+            {/* <Tab.Screen name="Поиск" component={SearchScreen} /> */}
+            <Tab.Screen name="Записаться" component={HomeScreen} />
+            <Tab.Screen name="Мои записи" component={ProfileScreen} />
           </Tab.Navigator>
         </NavigationContainer>
       </AppProvider>

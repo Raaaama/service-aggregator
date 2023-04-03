@@ -18,7 +18,7 @@ const LogInModal = (props) => {
   const [LogInModalVisible, setLogInModalVisible] = useState(true);
   const [signUpModalVisible, setSignUpModalVisible] = useState(false);
 
-  const { emadress, password, ip, setUid } = useContext(LogInContext);
+  const { emadress, password, ip, setUid, getUserEnrollments } = useContext(LogInContext);
 
   const handleLogIn = async () => {
     try {
@@ -31,8 +31,9 @@ const LogInModal = (props) => {
       );
       const json = await response.json();
       if (json[0] != undefined) {
-        setUid(json[0])
+        setUid(json[0].iduser)
         setLogInModalVisible(false);
+        getUserEnrollments(json[0].iduser)
       }
     } catch (error) {
       console.error(error);

@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
   },
   serviceTypes: {
     width: width,
-    marginTop: "60%",
+    height: "100%",
+    justifyContent: "center",
   },
   subcategoryTitle: {
     alignSelf: "center",

@@ -1,10 +1,13 @@
-module.exports = app => {
-    const Enrollment = require("../controllers/enrollment.controller.js");
+module.exports = (app) => {
+  const Enrollment = require("../controllers/enrollment.controller.js");
+
+  var router = require("express").Router();
+
+  router.get("/", Enrollment.findEnrollments);
   
-    var router = require("express").Router();
-  
-    router.get("/", Enrollment.findEnrollments);
-  
-    app.use('/api/enrollments', router);
-  };
-  
+  router.get("/customer/", Enrollment.findEnrollmentsByIdCus);
+
+  router.post("/", Enrollment.addEnrollment);
+
+  app.use("/api/enrollments", router);
+};
