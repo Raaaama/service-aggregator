@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const LogInContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [ip, setIp] = useState("https://9477-2-135-26-114.eu.ngrok.io");
+  const [ip, setIp] = useState("https://eb0f-2-135-26-114.eu.ngrok.io");
   const [uid, setUid] = useState(undefined);
   const [emadress, setEmadress] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +35,7 @@ export const AppProvider = ({ children }) => {
   const [serviceTypes, setServiceTypes] = useState([]);
   const [serviceTypeTitle, setServiceTypeTitle] = useState("");
   const [currentServiceType, setCurrentServiceType] = useState();
+  const [chooseMultiple, setChooseMultiple] = useState();
   const getServiceTypes = async (id) => {
     try {
       const response = await fetch(ip + "/api/servicetypes?idsubc=" + id);
@@ -172,6 +173,13 @@ export const AppProvider = ({ children }) => {
     getUserEnrollments(uid)
   };
 
+  function addZero(a) {
+    if (a < 10) {
+      a = "0" + a
+    }
+    return a
+  }
+
   const getTO = async (id, day, date) => {
     let temp = date + "T00:00:00";
     temp = new Date(temp);
@@ -204,19 +212,33 @@ export const AppProvider = ({ children }) => {
             }
 
             let temp = [];
-            let num = 0;
+
+            var today = new Date();
+            var currentTime = today.getHours() + ":" + today.getMinutes();
+            var currentDate = today.getFullYear() + "-" + addZero(today.getMonth() + 1) + "-" + addZero(today.getDate());
+
             for (let i = 0; i < data.length; i++) {
               let time = data[i].startTime;
               if (!busy.includes(time)) {
-                temp.push(time.substring(0, 5));
-                num++;
+                if (currentDate == from) {
+                  if (currentTime < time) {
+                    temp.push(time.substring(0, 5));
+                  }
+                } else {
+                  temp.push(time.substring(0, 5));
+                }
               }
               while (true) {
                 time = addMinutes(time, 30);
                 if (time + ":00" < data[i].endTime) {
                   if (!busy.includes(time)) {
-                    temp.push(time);
-                    num++;
+                    if (currentDate == from) {
+                      if (currentTime < time) {
+                        temp.push(time);
+                      }
+                    } else {
+                      temp.push(time);
+                    }
                   }
                 } else {
                   break;
@@ -278,7 +300,7 @@ export const AppProvider = ({ children }) => {
         categories, setCategories,
         idcat, setIdCat, 
         subcategories, getSubcategories, subcategoryTitle, setSubcategoryTitle,
-        serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, getServiceTypes, serviceTypeTitle, setServiceTypeTitle, currentServiceType, setCurrentServiceType,
+        serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, getServiceTypes, serviceTypeTitle, setServiceTypeTitle, currentServiceType, setCurrentServiceType, chooseMultiple, setChooseMultiple,
         providersModalVisible, setProvidersModalVisible, providers, getProviders, providersTitle, setProvidersTitle,
         providerPageModalVisible, setProviderPageModalVisible, images, getImages, providerInfo, setProviderInfo, getProviderInfo, 
         enrollmentModalVisible, setEnrollmentModalVisible, options, getOptions, timeOptions, enroll, getTO,

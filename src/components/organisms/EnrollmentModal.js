@@ -70,7 +70,8 @@ const EnrollmentModal = () => {
     setTimeOptions,
     getEnrollments,
     enroll,
-    getTO
+    getTO,
+    chooseMultiple
   } = useContext(LogInContext);
 
   const [markedDates, setMarkedDates] = useState({});
@@ -186,7 +187,6 @@ const EnrollmentModal = () => {
 
   let ops = timeOptions;
 
-  let chooseMultiple = false;
   const [ed, setEd] = useState(1);
   function itemChosen(item) {
     let temp = ops.findIndex(el => el.time == item.time)
