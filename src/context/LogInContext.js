@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const LogInContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [ip, setIp] = useState("https://eb0f-2-135-26-114.eu.ngrok.io");
+  const [ip, setIp] = useState("https://ef8e-2-135-26-114.ngrok-free.app");
   const [uid, setUid] = useState(undefined);
   const [emadress, setEmadress] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +55,10 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(ip + "/api/providers?idst=" + id);
       const json = await response.json();
+      for (let i = 0; i < json.length; i++) {
+        json[i].shown = true;
+      }
+      // console.log(json)
       setProviders(json);
       setCurrentServiceType(id);
     } catch (error) {
@@ -301,7 +305,7 @@ export const AppProvider = ({ children }) => {
         idcat, setIdCat, 
         subcategories, getSubcategories, subcategoryTitle, setSubcategoryTitle,
         serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, getServiceTypes, serviceTypeTitle, setServiceTypeTitle, currentServiceType, setCurrentServiceType, chooseMultiple, setChooseMultiple,
-        providersModalVisible, setProvidersModalVisible, providers, getProviders, providersTitle, setProvidersTitle,
+        providersModalVisible, setProvidersModalVisible, providers, setProviders, getProviders, providersTitle, setProvidersTitle,
         providerPageModalVisible, setProviderPageModalVisible, images, getImages, providerInfo, setProviderInfo, getProviderInfo, 
         enrollmentModalVisible, setEnrollmentModalVisible, options, getOptions, timeOptions, enroll, getTO,
         userEnrollments, getUserEnrollments,

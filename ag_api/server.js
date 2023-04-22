@@ -32,6 +32,7 @@ require("./app/routes/image.routes")(app);
 require("./app/routes/option.routes")(app);
 require("./app/routes/timetable.routes")(app);
 require("./app/routes/enrollment.routes")(app);
+require("./app/routes/service.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8082;

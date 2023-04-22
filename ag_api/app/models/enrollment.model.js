@@ -5,6 +5,21 @@ const Enrollment = function (enrollment) {
   this.id = enrollment.idenrollment;
 };
 
+Enrollment.getEnrollmentsByIdp = (idp, result) => {
+  let query = 'select a.idenrollment, b.iduser, b.username, b.telnum, d.optionname, c.opt, a.signUpDate, a.approved from enrollments a, users b, options c, option_types d, providers e, services f where f.idpro = e.idprovider and f.idservices = d.idserv and a.idcus = b.iduser and a.idop = c.idoption and c.idot = d.idoptiontypes';
+  
+  query += ' and e.idprovider = ' + idp
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
 Enrollment.getEnrollments = ([from, to, idop], result) => {
   let query = "select * from enrollments where signUpDate > '" + from + "' and signUpDate < '" + to + "' and idop = " + idop;
   
@@ -33,6 +48,19 @@ Enrollment.getEnrollmentsByIdcus = (idcus, result) => {
 
 Enrollment.addEnrollment = ([id, datetime, optionpicked], result) => {
   let query = 'insert into enrollments(idcus, idop, signUpDate) values(' + id + ',' + optionpicked + ',"' + datetime + '")'
+  
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
+Enrollment.updateEnrollment = ([status, id], result) => {
+  let query = 'update enrollments set approved = ' + status + ' where idenrollment = ' + id
   
   sql.query(query, (err, res) => {
     if (err) {

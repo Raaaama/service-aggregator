@@ -49,7 +49,7 @@ const App = () => {
              tabBarPressColor: 'white',
           }}>
             {/* <Tab.Screen name="Поиск" component={SearchScreen} /> */}
-            <Tab.Screen name="Записаться" component={HomeScreen} />
+            <Tab.Screen name="Запись" component={HomeScreen} />
             <Tab.Screen name="Мои записи" component={ProfileScreen} />
           </Tab.Navigator>
         </NavigationContainer>

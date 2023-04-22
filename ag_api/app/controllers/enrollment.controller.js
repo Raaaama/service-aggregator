@@ -1,5 +1,7 @@
 const Enrollment = require("../models/enrollment.model");
 
+
+
 exports.findEnrollments = (req, res) => {
   const from = req.query.from + " 00:00:00";
   const to = req.query.to + "  00:00:00";
@@ -28,6 +30,19 @@ exports.findEnrollmentsByIdCus = (req, res) => {
   });
 };
 
+exports.findEnrollmentsByIdp = (req, res) => {
+  const idp = req.query.idp
+
+  Enrollment.getEnrollmentsByIdp(idp, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving categories."
+      });
+    else res.send(data);
+  });
+};
+
 
 exports.addEnrollment = (req, res) => {
   // Validate request
@@ -46,6 +61,20 @@ exports.addEnrollment = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred"
+      });
+    else res.send(data);
+  });
+};
+
+exports.update = (req, res) => {
+  const id = req.body.id
+  const status = req.body.status
+
+  Enrollment.updateEnrollment([status, id], (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving categories."
       });
     else res.send(data);
   });

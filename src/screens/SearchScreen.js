@@ -7,7 +7,6 @@ import {
     TextInput,
     TouchableOpacity,
 } from "react-native";
-import Footer from "../components/molecules/Footer";
 
 const SearchScreen = ({ navigation }) => {
     return (

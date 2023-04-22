@@ -8,7 +8,7 @@ const User = function(user) {
 };
 
 User.doesExist = (user, result) => {
-    let query = `select iduser from users where emadress = '${user.emadress}' and userpassword = '${user.password}' and userrole = 0;`;
+    let query = `select iduser from users where emadress = '${user.emadress}' and userpassword = '${user.password}';`;
   
     sql.query(query, (err, res) => {
       if (err) {

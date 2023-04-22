@@ -10,24 +10,24 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import Footer from "../components/molecules/Footer";
 import LogInContext from "../context/LogInContext";
 
 var width = Dimensions.get("window").width;
 
 const Approved = (props) => {
-  if (props.approved == -1) {
+  if (props.approved == 2) {
     return <Text style={[styles.approved,{color: "red"}]}>Заявка отклонена</Text>;
   } else if (props.approved == 0) {
     return <Text style={[styles.approved,{color: "orange"}]}>Заявка отправлена</Text>;
   } else if (props.approved == 1) {
-    return <Text style={[styles.approved,{color: "white"}]}>Заявка принята</Text>;
+    return <Text style={[styles.approved,{color: "green"}]}>Заявка принята</Text>;
   }
 };
 
 const ProfileScreen = ({ navigation }) => {
   const { userEnrollments } = useContext(LogInContext);
 
+  if (userEnrollments.length > 0)
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="black" />
@@ -49,6 +49,14 @@ const ProfileScreen = ({ navigation }) => {
       />
     </View>
   );
+  else {
+    return(
+      <View style={[styles.container, {height: "100%"}]}>
+        <StatusBar backgroundColor="black" />
+        <Text style={styles.noEnrollments}>У Вас еще нет записей</Text>
+      </View>
+    )
+  }
 };
 
 const styles = StyleSheet.create({
@@ -58,6 +66,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     backgroundColor: "#202124",
+  },
+  noEnrollments: {
+    fontFamily: "Manrope",
+    color: "white",
+    fontSize: 20,
+    alignSelf: "center",
+    top: "30%"
   },
   enrollments: {
     width: width,

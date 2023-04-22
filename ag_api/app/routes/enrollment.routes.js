@@ -7,7 +7,11 @@ module.exports = (app) => {
   
   router.get("/customer/", Enrollment.findEnrollmentsByIdCus);
 
+  router.get("/provider/", Enrollment.findEnrollmentsByIdp);
+
   router.post("/", Enrollment.addEnrollment);
+
+  router.put("/", Enrollment.update);
 
   app.use("/api/enrollments", router);
 };

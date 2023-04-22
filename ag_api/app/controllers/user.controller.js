@@ -4,7 +4,7 @@ exports.logIn = (req, res) => {
   
     const user = new User({
         emadress: req.query.emadress,
-        password: req.query.password
+        password: req.query.password,
       });
 
     User.doesExist(user, (err, data) => {

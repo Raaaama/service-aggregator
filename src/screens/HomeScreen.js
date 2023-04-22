@@ -2,7 +2,6 @@ import { StatusBar, View, StyleSheet } from "react-native";
 
 import CategoriesList from "../components/molecules/CategoriesList";
 import LogInModal from "../components/organisms/LogInModal";
-import Footer from "../components/molecules/Footer";
 import ServiceTypeModal from "../components/organisms/ServiceTypeModal";
 import ProvidersModal from "../components/organisms/ProvidersModal";
 import ProviderPageModal from "../components/organisms/ProviderPageModal";

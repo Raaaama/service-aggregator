@@ -6,6 +6,7 @@ import {
   StatusBar,
   View,
   Text,
+  TextInput,
 } from "react-native";
 import { useState, useEffect } from "react";
 import Category from "../atoms/Category";
@@ -20,9 +21,26 @@ const ProvidersModal = (props) => {
   const {
     providersModalVisible,
     setProvidersModalVisible,
-    providers,
+    providers, setProviders,
     serviceTypeTitle,
   } = useContext(LogInContext);
+
+  const [filterText, setFilterText] = useState();
+
+  function filterProviders(text) {
+    setFilterText(text);
+    text = text.toLowerCase();
+    for (let i = 0; i < providers.length; i++) {
+      // && airports[i].apName.toLowerCase().search(text) == -1 && airports[i].apCode.toLowerCase().search(text) == -1
+      if (providers[i].name.toLowerCase().search(text) == -1) {
+        providers[i].shown = false;
+      }
+      else {
+        providers[i].shown = true;
+      }
+    }
+    () => setProviders(providers)
+  }
 
   return (
     <Modal
@@ -36,10 +54,17 @@ const ProvidersModal = (props) => {
         <View style={styles.textView}>
           <Text style={styles.serviceTypeTitle}>{serviceTypeTitle}</Text>
         </View>
+        <TextInput
+          // autoFocus={true}
+          placeholder='Поиск'
+          style={styles.searchInput}
+          placeholderTextColor='#808080'
+          onChangeText={(text) => filterProviders(text)}
+        ></TextInput>
         <FlatList
           contentContainerStyle={styles.subcategoriesList}
           data={providers}
-          //extraData={fromFilter}
+          extraData={filterText}
           renderItem={({ item }) => (
             <ProviderCard key={item.idprovider} {...item} />
             //   <Text key={item.idprovider}>{item.name}</Text>
@@ -62,6 +87,16 @@ const styles = StyleSheet.create({
     backgroundColor:"black", 
     width:"100%", 
     padding: 15
+  }, 
+  searchInput: {
+    backgroundColor: 'black',
+    color: "white",
+    fontSize: 25,
+    textAlign: "center",
+    fontFamily: 'Manrope',
+    width: '100%',
+    padding: "5%",
+    margin: "4%"
   },
   serviceTypeTitle: {
     alignSelf: "center",
@@ -72,7 +107,7 @@ const styles = StyleSheet.create({
   },
   subcategoriesList: {
     width: width,
-    marginTop: "60%",
+    // marginTop: "60%",
   },
 });
 

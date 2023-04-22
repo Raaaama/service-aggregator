@@ -8,17 +8,17 @@ const LogInForm = (props) => {
 
   return (
     <View style={styles.form}>
-      <Input handle={setEmadress} secured={false} placeholder={"email"} />
-      <Input handle={setPassword} secured={true} placeholder={"password"} />
+      <Input handle={setEmadress} secured={false} placeholder={"Логин"} />
+      <Input handle={setPassword} secured={true} placeholder={"Пароль"} />
       <TouchableOpacity
         style={styles.LogInButton}
         onPress={() => props.handleLogIn()}>
-        <Text style={styles.LogInButtonTxt}>Log In</Text>
+        <Text style={styles.LogInButtonTxt}>Войти</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.LogInButton}
         onPress={() => props.handleSignUp(true)}>
-        <Text style={styles.LogInButtonTxt}>Sign Up</Text>
+        <Text style={styles.LogInButtonTxt}>Регистрация</Text>
       </TouchableOpacity>
     </View>
   );

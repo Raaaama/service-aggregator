@@ -7,15 +7,15 @@ import { useState } from "react";
 const SignUpForm = (props) => {
     return (
         <View style={styles.form}>
-            <Input handle={props.setEmail} secured={false} placeholder={"email"} />
-            <Input handle={props.setName} secured={false} placeholder={"name"} />
-            <Input handle={props.setTelNum} secured={false} placeholder={"phone number"} />
-            <Input handle={props.setPw} secured={false} placeholder={"password"} />
+            <Input handle={props.setEmail} secured={false} placeholder={"Логин"} />
+            <Input handle={props.setName} secured={false} placeholder={"Имя"} />
+            <Input handle={props.setTelNum} secured={false} placeholder={"Номер телефона"} />
+            <Input handle={props.setPw} secured={false} placeholder={"Пароль"} />
             <TouchableOpacity
                 style={styles.LogInButton}
                 onPress={() => props.handleSU()}
             >
-                <Text style={styles.LogInButtonTxt}>Sign Up</Text>
+                <Text style={styles.LogInButtonTxt}>Зарегистрироваться</Text>
             </TouchableOpacity>
         </View>
     );

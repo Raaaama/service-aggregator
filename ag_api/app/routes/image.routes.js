@@ -4,6 +4,10 @@ module.exports = app => {
     var router = require("express").Router();
   
     router.get("/", Image.findAll);
+
+    router.post("/", Image.add);
+
+    router.post("/delete/", Image.delete)
   
     app.use('/api/image', router);
   };

@@ -14,7 +14,7 @@ const ProviderCard = (props) => {
     getImages(id);
     setProviderPageModalVisible(true);
   }
-
+  if (props.shown)
   return (
     <TouchableOpacity style={styles.card} onPress={() => handleF(props.idprovider)}>
       <Image

@@ -65,15 +65,10 @@ const CategoriesList = (props) => {
   return (
     <View style={styles.categoriesList}>
       <ExpandableListView
-        data={CONTENT} // required
-        // onInnerItemClick={handleInnerItemClick}
-        // onItemClick={handleItemClick}
-
-        
+        data={CONTENT}
         itemContainerStyle={styles.category}
         itemLabelStyle={styles.category}
         chevronColor="white"
-
         animated={false}
       />
     </View>
