@@ -6,7 +6,7 @@ const Timetable = function (timetable) {
 };
 
 Timetable.getTimetable = ([idoption,dayOfTheWeek], result) => {
-  let query = "select b.startTime, b.endTime, b.dayOfTheWeek from options a, timetable b where a.idoption = b.idoption";
+  let query = "select b.idtimetable, b.startTime, b.endTime, b.dayOfTheWeek from options a, timetable b where a.idoption = b.idoption";
 
   query += ` and a.idoption = ${idoption}`;
   query += ` and dayOfTheWeek = ${dayOfTheWeek}`;

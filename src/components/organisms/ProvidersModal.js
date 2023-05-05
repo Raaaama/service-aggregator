@@ -31,7 +31,6 @@ const ProvidersModal = (props) => {
     setFilterText(text);
     text = text.toLowerCase();
     for (let i = 0; i < providers.length; i++) {
-      // && airports[i].apName.toLowerCase().search(text) == -1 && airports[i].apCode.toLowerCase().search(text) == -1
       if (providers[i].name.toLowerCase().search(text) == -1) {
         providers[i].shown = false;
       }
@@ -55,7 +54,6 @@ const ProvidersModal = (props) => {
           <Text style={styles.serviceTypeTitle}>{serviceTypeTitle}</Text>
         </View>
         <TextInput
-          // autoFocus={true}
           placeholder='Поиск'
           style={styles.searchInput}
           placeholderTextColor='#808080'

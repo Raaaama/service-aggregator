@@ -14,3 +14,17 @@ exports.findAll = (req, res) => {
     else res.send(data);
   });
 };
+
+
+exports.findNew = (req, res) => {
+  const id = req.query.idp;
+
+  ServiceType.getNew(id, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving categories."
+      });
+    else res.send(data);
+  });
+};

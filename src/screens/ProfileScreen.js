@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import {
   Text,
   StatusBar,
@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  RefreshControl,
+  ScrollView
 } from "react-native";
 import LogInContext from "../context/LogInContext";
 
@@ -25,17 +27,29 @@ const Approved = (props) => {
 };
 
 const ProfileScreen = ({ navigation }) => {
-  const { userEnrollments } = useContext(LogInContext);
+  const { uid, userEnrollments, getUserEnrollments } = useContext(LogInContext);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getUserEnrollments(uid);
+    setRefreshing(false);
+  }, []);
 
   if (userEnrollments.length > 0)
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="black" />
+
       <FlatList
         contentContainerStyle={styles.enrollments}
         data={userEnrollments}
         scrollEnabled={true}
         ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         renderItem={({ item }) => (
           <View style={styles.enrollment}>
             <Text style={styles.signUpDate}>{item.signUpDate}</Text>

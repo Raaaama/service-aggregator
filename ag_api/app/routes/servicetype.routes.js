@@ -5,6 +5,8 @@ module.exports = app => {
   
     // Retrieve all Categories
     router.get("/", ServiceType.findAll);
+
+    router.get("/new/", ServiceType.findNew);
   
     app.use('/api/servicetypes', router);
   };

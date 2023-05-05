@@ -6,9 +6,11 @@ const Enrollment = function (enrollment) {
 };
 
 Enrollment.getEnrollmentsByIdp = (idp, result) => {
-  let query = 'select a.idenrollment, b.iduser, b.username, b.telnum, d.optionname, c.opt, a.signUpDate, a.approved from enrollments a, users b, options c, option_types d, providers e, services f where f.idpro = e.idprovider and f.idservices = d.idserv and a.idcus = b.iduser and a.idop = c.idoption and c.idot = d.idoptiontypes';
+  let query = 'select g.name, f.idservices, a.idenrollment, b.iduser, b.username, b.telnum, d.optionname, c.idoption, c.opt, a.signUpDate, a.approved from enrollments a, users b, options c, option_types d, providers e, services f, service_types g where f.idpro = e.idprovider and f.idservices = d.idserv and a.idcus = b.iduser and a.idop = c.idoption and c.idot = d.idoptiontypes and f.idst = g.idservice_type';
   
   query += ' and e.idprovider = ' + idp
+
+  query += ' order by a.signUpDate desc'
 
   sql.query(query, (err, res) => {
     if (err) {
