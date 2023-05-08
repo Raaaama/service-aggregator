@@ -22,4 +22,30 @@ Option.getByServiceId = (id, result) => {
   });
 };
 
+Option.addOption = ([idot, opt], result) => {
+  let query = `insert into options(idot, opt) values(${idot},"${opt}")`;
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
+Option.deleteOption = (ido, result) => {
+  let query = `delete from options where idoption = ${ido}`;
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
 module.exports = Option;

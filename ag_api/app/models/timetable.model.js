@@ -21,4 +21,30 @@ Timetable.getTimetable = ([idoption,dayOfTheWeek], result) => {
   });
 };
 
+Timetable.addTimetable = ([ido,startTime,endTime,dayOfTheWeek], result) => {
+  let query = `insert into timetable(idoption,startTime,endTime,dayOfTheWeek) values(${ido},"${startTime}","${endTime}",${dayOfTheWeek})`;
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
+Timetable.deleteTimetable = (id, result) => {
+  let query = `delete from timetable where idtimetable = ${id}`;
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
 module.exports = Timetable;
