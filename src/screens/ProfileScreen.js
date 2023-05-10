@@ -33,6 +33,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    console.log(uid)
     getUserEnrollments(uid);
     setRefreshing(false);
   }, []);
@@ -68,6 +69,25 @@ const ProfileScreen = ({ navigation }) => {
       <View style={[styles.container, {height: "100%"}]}>
         <StatusBar backgroundColor="black" />
         <Text style={styles.noEnrollments}>У Вас еще нет записей</Text>
+        <FlatList
+        contentContainerStyle={styles.enrollments}
+        data={userEnrollments}
+        scrollEnabled={true}
+        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        renderItem={({ item }) => (
+          <View style={styles.enrollment}>
+            <Text style={styles.signUpDate}>{item.signUpDate}</Text>
+            {/* <Text style={styles.providerName}>{item.providerName}</Text> */}
+            <Text style={styles.serviceTypeName}>{item.serviceTypeName} в {item.providerName}</Text>
+            <Text style={styles.adress}>{item.adress}</Text>
+            <Text style={styles.opt}>{item.optionname}: {item.opt}</Text>
+            <Approved approved={item.approved}/>
+          </View>
+        )}
+      />
       </View>
     )
   }

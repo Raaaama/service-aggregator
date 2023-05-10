@@ -36,7 +36,7 @@ Enrollment.getEnrollments = ([from, to, idop], result) => {
 };
 
 Enrollment.getEnrollmentsByIdcus = (idcus, result) => {
-  let query = "select a.idenrollment, c.optionname, b.opt, a.signUpDate, a.approved, e.name as 'serviceTypeName', f.name as 'providerName', f.adress from enrollments a, options b, option_types c, services d, service_types e, providers f where idop = idoption and b.idot = c.idoptiontypes and c.idserv = d.idservices and e.idservice_type = d.idst and d.idpro = f.idprovider and idcus = " + idcus + " ORDER BY signUpDate";
+  let query = "select a.idenrollment, c.optionname, b.opt, a.signUpDate, a.approved, e.name as 'serviceTypeName', f.name as 'providerName', f.adress from enrollments a, options b, option_types c, services d, service_types e, providers f where idop = idoption and b.idot = c.idoptiontypes and c.idserv = d.idservices and e.idservice_type = d.idst and d.idpro = f.idprovider and idcus = " + idcus + " ORDER BY signUpDate desc";
   
   sql.query(query, (err, res) => {
     if (err) {

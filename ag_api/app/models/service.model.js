@@ -8,7 +8,7 @@ const Service = function (service) {
 };
 
 Service.getByIdservice = (id, result) => {
-  let query = `select * from services where idservices = ` + id;
+  let query = `select * from services a, option_types b where a.idservices = b.idserv and idservices = ` + id;
 
   sql.query(query, (err, res) => {
     if (err) {

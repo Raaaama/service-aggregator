@@ -18,4 +18,17 @@ OptionType.updateOptionName = ([optionName, idot], result) => {
   });
 };
 
+OptionType.addOptiontype = (ids, result) => {
+  let query = `insert into option_types(idserv, optionname) values(${ids},"")`;
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    result(null, res);
+  });
+};
+
 module.exports = OptionType;

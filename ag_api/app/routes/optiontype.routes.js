@@ -5,6 +5,8 @@ module.exports = app => {
   
     router.put("/", OptionType.update);
 
+    router.post("/", OptionType.add);
+
     app.use('/api/optiontype', router);
   };
   

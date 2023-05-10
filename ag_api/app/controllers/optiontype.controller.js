@@ -13,3 +13,16 @@ exports.update = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.add = (req, res) => {
+  const ids = req.body.ids;
+
+  OptionType.addOptiontype(ids, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving categories.",
+      });
+    else res.send(data);
+  });
+};

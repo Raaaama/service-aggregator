@@ -16,7 +16,12 @@ Provider.getAll = (id, result) => {
     query += ` and c.idst = ${id}`;
   }
 
+  //only if it has an option with a timetable
+  query += ` and a.idprovider in (select distinct d.idpro from timetable a, options b, option_types c, services d, providers e where b.idoption = a.idoption and b.idot = c.idoptiontypes and c.idserv = d.idservices and d.idpro = e.idprovider and d.idst = ${id})`
+
   query += ` group by a.idprovider`;
+
+
 
   sql.query(query, (err, res) => {
     if (err) {
