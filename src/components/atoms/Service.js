@@ -3,31 +3,22 @@ import { useState, useContext } from "react";
 import Svg, { Path } from 'react-native-svg';
 import LogInContext from "../../context/LogInContext";
 
-const ProviderCard = (props) => {
+const Service = (props) => {
 
   const {
-    setProviderPageModalVisible, getImages, currentServiceType, providerInfo, getProviderInfo, getProviderServices, getOptions
+    setProviderPageModalVisible, getImages, currentServiceType, providerInfo, getProviderInfo, getProviderServices, setChosenServiceTypes, setAddServiceModalVisible, getOptions
   } = useContext(LogInContext);
 
-  function handleF(id, idservices) {
+  function handleF(idst, idservices) {
+    setChosenServiceTypes(current => [...current, idst])
     getOptions(idservices)
-    getProviderServices(id)
-    getProviderInfo([id, currentServiceType]);
-    getImages(id);
-    setProviderPageModalVisible(true);
+    setAddServiceModalVisible(false)
   }
-  if (props.shown)
+
   return (
-    <TouchableOpacity style={styles.card} onPress={() => handleF(props.idprovider, props.idservices)}>
-      <Image
-        style={styles.img}
-        source={{
-          uri: props.image_url,
-        }}
-      />
+    <TouchableOpacity style={styles.card} onPress={() => handleF(props.idst, props.idservices)}>
       <View style={styles.info}>
         <Text style={styles.name}>{props.name}</Text>
-        <Text style={styles.adress}>{props.adress}</Text>
         <View style={styles.timeAndPrice}>
           <View style={styles.time}>
             <Svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
@@ -36,7 +27,7 @@ const ProviderCard = (props) => {
             <Text style={styles.timePerService}>{props.timePerService} минут</Text>
           </View>
           <View style={{flexDirection: "row"}}>
-          <Text style={styles.from}>от</Text>
+          {/* <Text style={styles.from}>от</Text> */}
           <Text style={styles.price}>{props.price}₸</Text>
           </View>
         </View>
@@ -47,15 +38,15 @@ const ProviderCard = (props) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
     backgroundColor: "black",
     padding: 20,
-    flexDirection: "row",
+    // flexDirection: "row",
     borderRadius: 10,
   },
   info: {
-    paddingLeft: 20,
+    // paddingLeft: 20,
     color: "white",
     flex: 1
   },
@@ -110,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProviderCard;
+export default Service;

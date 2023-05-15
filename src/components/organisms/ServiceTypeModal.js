@@ -21,13 +21,14 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 var width = Dimensions.get("window").width;
 
 const ServiceTypeModal = (props) => {
-  const { serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, subcategoryTitle, getProviders, setProvidersModalVisible, setServiceTypeTitle, setChooseMultiple } =
+  const { serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, subcategoryTitle, getProviders, setProvidersModalVisible, setServiceTypeTitle, setChooseMultiple, chosenServiceTypes, setChosenServiceTypes} =
     useContext(LogInContext);
 
   function handleServiceType(item) {
     getProviders(item.idservice_type);
     setServiceTypeTitle(item.name);
     setChooseMultiple(item.choosemultiple)
+    setChosenServiceTypes([item.idservice_type])
     setProvidersModalVisible(true);
   }
     
@@ -36,10 +37,13 @@ const ServiceTypeModal = (props) => {
       animationType="slide"
       visible={serviceTypeModalVisible}
       presentationStyle={"fullScreen"}
-      onRequestClose={() => setServiceTypeModalVisible(false)}
+      onRequestClose={() => {
+        setServiceTypeModalVisible(false)
+        // setChosenServiceTypes([])
+      }}
     >
       <View style={styles.container}>
-        <StatusBar backgroundColor="black"/>
+        <StatusBar backgroundColor="white" />
         <View style={styles.textView}>
           <Text style={styles.subcategoryTitle}>{subcategoryTitle}</Text>
         </View>

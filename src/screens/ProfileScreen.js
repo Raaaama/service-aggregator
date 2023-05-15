@@ -31,12 +31,12 @@ const ProfileScreen = ({ navigation }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = () => {
+    // console.log(uid)
     setRefreshing(true);
-    console.log(uid)
     getUserEnrollments(uid);
     setRefreshing(false);
-  }, []);
+  };
 
   if (userEnrollments.length > 0)
   return (

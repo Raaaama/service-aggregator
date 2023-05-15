@@ -49,7 +49,7 @@ const ProvidersModal = (props) => {
       onRequestClose={() => setProvidersModalVisible(false)}
     >
       <View style={styles.container}>
-        <StatusBar backgroundColor="black" />
+        <StatusBar backgroundColor="white" />
         <View style={styles.textView}>
           <Text style={styles.serviceTypeTitle}>{serviceTypeTitle}</Text>
         </View>

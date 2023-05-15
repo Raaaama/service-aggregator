@@ -14,6 +14,7 @@ import Svg, { Path } from "react-native-svg";
 import { Calendar, CalendarList, LocaleConfig } from "react-native-calendars";
 import SelectDropdown from "react-native-select-dropdown";
 import TimePicker from "../atoms/TimePicker";
+import Option from "../atoms/Option";
 
 LocaleConfig.locales["ru"] = {
   monthNames: [
@@ -71,7 +72,8 @@ const EnrollmentModal = () => {
     getEnrollments,
     enroll,
     getTO,
-    chooseMultiple
+    chooseMultiple,
+    chosenOptions
   } = useContext(LogInContext);
 
   const [markedDates, setMarkedDates] = useState({});
@@ -79,20 +81,10 @@ const EnrollmentModal = () => {
   const [defaultDateStyle, setDefaultDateStyle] = useState(true);
   const [dateTxt, setDateTxt] = useState(undefined);
   const [dateString, setDateString] = useState();
-  const [buttonText, setButtonText] = useState("Опция");
   const [optionIsPicked, setOptionIsPicked] = useState(false);
   const [dayIsPicked, setDayIsPicked] = useState(false);
-  const [optionPicked, setOptionPicked] = useState();
+  const [optionPicked, setOptionPicked] = useState([]);
   const [enrollTimeChosen, chooseEnrollTime] = useState([]);
-
-  useEffect(() => {
-    setButtonText(options[0].optionname);
-  });
-
-  let data = [];
-  options.forEach((element) => {
-    data.push(element.opt);
-  });
 
   const monthNames = [
     "Январь",
@@ -154,12 +146,6 @@ const EnrollmentModal = () => {
     handleTimetable(undefined, dt.getDay() + 1, dt);
   }
 
-  function handleOption(index) {
-    // setOptionIsPicked(true);
-    setOptionPicked(options[index].idoption);
-    handleTimetable(options[index].idoption, undefined, undefined);
-  }
-
   function addZero(a) {
     if (a < 10) {
       a = "0" + a
@@ -200,14 +186,16 @@ const EnrollmentModal = () => {
   }
 
   function handleEnroll() {
-    enroll(ops, dateString, optionPicked)
-    ops.length = 0
-    setOptionIsPicked(false);
-    setOptionPicked(undefined);
-    setCurrent(undefined)
-    setMarkedDates({})
-    setTimeOptions([])
-    ops = []
+    // enroll(ops, dateString, optionPicked)
+    // ops.length = 0
+    // setOptionIsPicked(false);
+    // setOptionPicked(undefined);
+    // setCurrent(undefined)
+    // setMarkedDates({})
+    // setTimeOptions([])
+    // ops = []
+
+    console.log(chosenOptions)
   }
 
   return (
@@ -267,7 +255,8 @@ const EnrollmentModal = () => {
           markedDates={markedDates}
           current={current}
         />
-        <SelectDropdown
+        
+        {/* <SelectDropdown
           data={data}
           onSelect={(selectedItem, index) => {
             handleOption(index);
@@ -317,13 +306,29 @@ const EnrollmentModal = () => {
             );
           }}
           dropdownIconPosition={"left"}
-        />
+        /> */}
 
         {/* <TimePicker
           optionIsPicked={optionIsPicked}
           dayIsPicked={dayIsPicked}
           timeOptions={timeOptions}
         /> */}
+
+        <FlatList
+          contentContainerStyle={styles.list}
+          // style={{width:"90%"}}
+          data={options}
+          // horizontal={true}
+          // numColumns={5}
+          // directionalLockEnabled={true}
+          // alwaysBounceVertical={false}
+          //extraData={fromFilter}
+          // extraData={[ed, timeOptions, ops]}
+          renderItem={(item, i) => (
+            <Option item={item}/>
+          )}
+          ItemSeparatorComponent={() => <View style={{height: 20}} />}
+        />
 
         <FlatList
           // contentContainerStyle={styles.subcategoriesList}
@@ -370,6 +375,9 @@ const styles = StyleSheet.create({
     width: "90%",
 
     backgroundColor: "green",
+  },
+  list: {
+    top: "8%"
   },
   enrollBtn: {
     // marginTop: "20%",

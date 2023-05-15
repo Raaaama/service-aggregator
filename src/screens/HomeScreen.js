@@ -6,6 +6,7 @@ import ServiceTypeModal from "../components/organisms/ServiceTypeModal";
 import ProvidersModal from "../components/organisms/ProvidersModal";
 import ProviderPageModal from "../components/organisms/ProviderPageModal";
 import EnrollmentModal from "../components/organisms/EnrollmentModal";
+import AddServiceModal from "../components/organisms/AddServiceModal";
 import { useState } from "react";
 
 const HomeScreen = ({ navigation }) => {
@@ -18,6 +19,7 @@ const HomeScreen = ({ navigation }) => {
       <ProvidersModal />
       <ProviderPageModal/>
       <EnrollmentModal/>
+      <AddServiceModal/>
     </View>
   );
 };

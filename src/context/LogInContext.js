@@ -3,8 +3,8 @@ import { createContext, useState } from "react";
 const LogInContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [ip, setIp] = useState("https://96c1-2-135-26-114.ngrok-free.app");
-  const [uid, setUid] = useState(undefined);
+  const [ip, setIp] = useState("https://c1cf-2-135-26-114.ngrok-free.app");
+  const [uid, setUid] = useState("");
   const [emadress, setEmadress] = useState("");
   const [password, setPassword] = useState("");
 
@@ -100,15 +100,45 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+  const [chosenServiceTypes, setChosenServiceTypes] = useState([]);
+  const [providerServices, setProviderServices] = useState([]);
+
+  const getProviderServices = async (idp) => {
+    try {
+      const response = await fetch(ip + "/api/service?idp=" + idp + "&withtt=1");
+      const json = await response.json();
+      // console.log(json);
+      setProviderServices(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [addServiceModalVisible,setAddServiceModalVisible] = useState(false)
+
+
+  const [chosenOptions, setChosenOptions] = useState([])
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   //entollmentModal
   const [enrollmentModalVisible, setEnrollmentModalVisible] = useState(false);
-  const [options, setOptions] = useState([{}]);
+  const [options, setOptions] = useState([]);
   const getOptions = async (idservices) => {
+    if (idservices === -1) {
+      setOptions([]);
+    }
     try {
       const response = await fetch(ip + "/api/option?idservices=" + idservices);
       const json = await response.json();
       // console.log(json);
-      setOptions(json);
+      options.push(json);
     } catch (error) {
       console.error(error);
     }
@@ -310,7 +340,12 @@ export const AppProvider = ({ children }) => {
         enrollmentModalVisible, setEnrollmentModalVisible, options, getOptions, timeOptions, enroll, getTO,
         userEnrollments, getUserEnrollments,
         emadress, setEmadress, password, setPassword, 
-        profileChosen, SetProfileChosen, homeChosen, SetHomeChosen, searchChosen, SetSearchChosen, setTimeOptions
+        profileChosen, SetProfileChosen, homeChosen, SetHomeChosen, searchChosen, SetSearchChosen, setTimeOptions,
+
+        chosenServiceTypes, setChosenServiceTypes, 
+        providerServices, setProviderServices, getProviderServices,
+        addServiceModalVisible,setAddServiceModalVisible,
+        chosenOptions, setChosenOptions
       }}
     >
       {children}
