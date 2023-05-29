@@ -8,6 +8,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Alert,
+  useWindowDimensions,
 } from "react-native";
 import LogInContext from "../../context/LogInContext";
 import Svg, { Path } from "react-native-svg";
@@ -15,6 +17,7 @@ import { Calendar, CalendarList, LocaleConfig } from "react-native-calendars";
 import SelectDropdown from "react-native-select-dropdown";
 import TimePicker from "../atoms/TimePicker";
 import Option from "../atoms/Option";
+import OptionsCarousel from "../molecules/OptionsCarousel";
 
 LocaleConfig.locales["ru"] = {
   monthNames: [
@@ -73,18 +76,23 @@ const EnrollmentModal = () => {
     enroll,
     getTO,
     chooseMultiple,
-    chosenOptions
+    chosenOptions,
+    optionData,
+    currentIndex,
+    setCurrentIndex,
+    chosenDates,
+    setChosenDates,
   } = useContext(LogInContext);
 
   const [markedDates, setMarkedDates] = useState({});
   const [current, setCurrent] = useState();
   const [defaultDateStyle, setDefaultDateStyle] = useState(true);
   const [dateTxt, setDateTxt] = useState(undefined);
-  const [dateString, setDateString] = useState();
   const [optionIsPicked, setOptionIsPicked] = useState(false);
   const [dayIsPicked, setDayIsPicked] = useState(false);
   const [optionPicked, setOptionPicked] = useState([]);
   const [enrollTimeChosen, chooseEnrollTime] = useState([]);
+  const { width } = useWindowDimensions();
 
   const monthNames = [
     "Январь",
@@ -139,63 +147,124 @@ const EnrollmentModal = () => {
   }
 
   function chooseDate(day) {
+    // console.log(day)
+    // console.log(new Date("2023-06-18".dateString))
+    setMarkedDates({
+      [day.dateString]: {
+        selected: true,
+        color: "#807d7d",
+      },
+    });
     setDefaultDateStyle(false);
     var dt = new Date(day.dateString);
-    setDateString(day.dateString);
+    setCurrent(day.dateString);
     setDateTxt(dt.getDay() + 1);
-    handleTimetable(undefined, dt.getDay() + 1, dt);
+    handleTimetable(dt.getDay() + 1, dt);
   }
 
   function addZero(a) {
     if (a < 10) {
-      a = "0" + a
+      a = "0" + a;
     }
-    return a
+    return a;
   }
 
-  function handleTimetable(id, day, date) {
-    if (id == undefined) {
-      id = optionPicked;
-    }
+  function handleTimetable(day, date) {
     if (day == undefined) {
       day = dateTxt;
     }
     if (date == undefined) {
-      date = current
+      date = current;
+    } else {
+      date =
+        date.getFullYear() +
+        "-" +
+        addZero(date.getMonth() + 1) +
+        "-" +
+        addZero(date.getDate());
     }
-    else {
-      date = date.getFullYear() + "-" + addZero(date.getMonth() + 1) + "-" + addZero(date.getDate())
+
+    if (chosenOptions[currentIndex] != undefined) {
+      getTO(currentIndex, chosenOptions[currentIndex].idoption, day, date);
     }
-    if (id != undefined && day != undefined && date != undefined) {
-      getTO(id, day, date);
-    }
+
+    chosenDates[currentIndex] = date;
   }
 
   let ops = timeOptions;
 
   const [ed, setEd] = useState(1);
-  function itemChosen(item) {
-    let temp = ops.findIndex(el => el.time == item.time)
+  function itemChosen(number, item) {
+    // console.log(item)
+    // console.log(ops)
+    // console.log(number)
+    let temp = ops[number].findIndex((el) => el.time == item.time);
+
     if (chooseMultiple == false) {
-      for (let i = 0; i < ops.length; i++) {
-        ops[i].chosen = false
+      for (let i = 0; i < ops[number].length; i++) {
+        ops[number][i].chosen = false;
       }
     }
-    ops[temp].chosen = !ops[temp].chosen;
+
+    ops[number][temp].chosen = !ops[number][temp].chosen;
+    setTimeOptions(ops);
     setEd(ed + 1);
   }
 
-  function handleEnroll() {
-    // enroll(ops, dateString, optionPicked)
-    // ops.length = 0
-    // setOptionIsPicked(false);
-    // setOptionPicked(undefined);
-    // setCurrent(undefined)
-    // setMarkedDates({})
-    // setTimeOptions([])
-    // ops = []
+  const showAlert = () =>
+    Alert.alert(
+      "Готово!",
+      'Статус заявки (-ок) можно посмотреть во вкладке "Мои записи"',
+      [{ text: "OK", style: "default" }]
+    );
 
-    console.log(chosenOptions)
+  const WarningAlert = () =>
+    Alert.alert(
+      "Внимание!",
+      "Для отправки заявки необходимо выбрать дату, опцию и время!",
+      [{ text: "OK", style: "default" }]
+    );
+
+  function handleEnroll() {
+    if (
+      ops.findIndex((e) => e == undefined) > 0 ||
+      chosenDates.findIndex((e) => e == undefined) > 0 ||
+      chosenOptions.findIndex((e) => e == undefined) > 0
+    ) {
+      WarningAlert();
+      // console.log(ops, chosenDates, chosenOptions);
+    } 
+    else {
+      let hasOpsChosen = true;
+      for (let i = 0; i < ops.length; i++) {
+        if (ops[i].findIndex((e) => e.chosen == true) < 0) {
+          hasOpsChosen = false;
+          break;
+        }
+      }
+
+      if (hasOpsChosen) {
+        showAlert();
+        for (let i = 0; i < chosenOptions.length; i++) {
+          enroll(ops[i], chosenDates[i], chosenOptions[i].idoption);
+        }
+        ops.length = 0;
+
+        setCurrent(undefined);
+        setMarkedDates({});
+        setTimeOptions([]);
+        ops = [];
+
+        for (let i = 0; i < chosenOptions.length; i++) {
+          chosenOptions[i] = undefined;
+          timeOptions[i] = undefined;
+          chosenDates[i] = undefined;
+        }
+      }
+      else {
+        WarningAlert();
+      }
+    }
   }
 
   return (
@@ -206,6 +275,15 @@ const EnrollmentModal = () => {
       onRequestClose={() => {
         setEnrollmentModalVisible(false);
         setOptionIsPicked(false);
+        setCurrent(undefined);
+        setMarkedDates({});
+        setTimeOptions([]);
+        setCurrentIndex(0);
+        for (let i = 0; i < chosenOptions.length; i++) {
+          chosenOptions[i] = undefined;
+          timeOptions[i] = undefined;
+          chosenDates[i] = undefined;
+        }
       }}
     >
       <StatusBar backgroundColor="white" />
@@ -214,37 +292,9 @@ const EnrollmentModal = () => {
           style={{
             width: width,
           }}
-          theme={{
-            calendarBackground: "black",
-            textDayFontFamily: "Manrope",
-            textMonthFontFamily: "Manrope",
-            textDayHeaderFontFamily: "Manrope",
-
-            dayTextColor: "white",
-            textDisabledColor: "#5c5c5c",
-            monthTextColor: "white",
-            textSectionTitleColor: "white",
-            dayTextColor: "white",
-            arrowColor: "white",
-            todayTextColor: "white",
-
-            textSectionTitleDisabledColor: "#d9e1e8",
-            selectedDayBackgroundColor: "white",
-            selectedDayTextColor: "black",
-
-            textDayFontSize: 16,
-            textMonthFontSize: 20,
-            textDayHeaderFontSize: 12,
-          }}
+          theme={styles.calendarTheme}
           onDayPress={(day) => {
-            setMarkedDates({
-              [day.dateString]: {
-                selected: true,
-                color: "#807d7d",
-              },
-            });
             chooseDate(day);
-            setCurrent(day.dateString);
           }}
           enableSwipeMonths={true}
           minDate={getCurrentDate()}
@@ -255,99 +305,21 @@ const EnrollmentModal = () => {
           markedDates={markedDates}
           current={current}
         />
-        
-        {/* <SelectDropdown
-          data={data}
-          onSelect={(selectedItem, index) => {
-            handleOption(index);
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item;
-          }}
-          defaultButtonText={buttonText}
-          buttonStyle={{
-            width: "80%",
-            margin: "10%",
-            backgroundColor: "black",
-          }}
-          buttonTextStyle={{
-            fontFamily: "Manrope",
-            color: "white",
-            marginRight: 20,
-          }}
-          rowStyle={{ backgroundColor: "black" }}
-          rowTextStyle={{ fontFamily: "Manrope", color: "white" }}
-          dropdownStyle={{ backgroundColor: "black" }}
-          renderDropdownIcon={() => {
-            return (
-              <Svg
-                width={20}
-                height={20}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="white"
-                class="w-6 h-6"
-              >
-                <Path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                />
-              </Svg>
-            );
-          }}
-          dropdownIconPosition={"left"}
-        /> */}
 
-        {/* <TimePicker
-          optionIsPicked={optionIsPicked}
-          dayIsPicked={dayIsPicked}
-          timeOptions={timeOptions}
-        /> */}
-
-        <FlatList
-          contentContainerStyle={styles.list}
-          // style={{width:"90%"}}
-          data={options}
-          // horizontal={true}
-          // numColumns={5}
-          // directionalLockEnabled={true}
-          // alwaysBounceVertical={false}
-          //extraData={fromFilter}
-          // extraData={[ed, timeOptions, ops]}
-          renderItem={(item, i) => (
-            <Option item={item}/>
-          )}
-          ItemSeparatorComponent={() => <View style={{height: 20}} />}
+        <OptionsCarousel
+          date={current}
+          dateTxt={dateTxt}
+          getTO={getTO}
+          itemChosen={itemChosen}
+          ed={ed}
+          handleTimetable={handleTimetable}
+          setMarkedDates={setMarkedDates}
         />
 
-        <FlatList
-          // contentContainerStyle={styles.subcategoriesList}
-          // style={{width:"90%"}}
-          data={ops}
-          // horizontal={true}
-          numColumns={5}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-          //extraData={fromFilter}
-          extraData={[ed, timeOptions, ops]}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={item.chosen ? styles.timeOptionChosen : styles.timeOption} onPress={() => itemChosen(item)}>
-              <Text key={item.time} style={item.chosen ? styles.timeOptionChosenTxt : styles.timeOptionTxt}>{item.time}</Text>
-            </TouchableOpacity>
-          )}
-        />
-
-        <TouchableOpacity style={styles.enrollBtn} onPress={() => handleEnroll(ops, dateString)}>
+        <TouchableOpacity
+          style={styles.enrollBtn}
+          onPress={() => handleEnroll()}
+        >
           <Text style={styles.enrollTxt}>Отправить заявку</Text>
         </TouchableOpacity>
       </View>
@@ -362,13 +334,14 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between",
     backgroundColor: "#202124",
     alignItems: "center",
+    height: "90%",
   },
   calendar: {
-    flex: 1,
-    marginTop: "auto",
-    backgroundColor: "white",
-    borderTopColor: "black",
-    borderTopWidth: 1,
+    // flex: 1,
+    // marginTop: "auto",
+    // backgroundColor: "white",
+    // borderTopColor: "black",
+    // borderTopWidth: 1,
   },
   selectTime: {
     flex: 1,
@@ -377,15 +350,16 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
   },
   list: {
-    top: "8%"
+    top: "8%",
   },
   enrollBtn: {
     // marginTop: "20%",
-    position: "absolute",
-    bottom: "2%",
+    // position: "absolute",
+    // bottom: "2%",
+    marginBottom: "2%",
     backgroundColor: "black",
     width: "80%",
-    height: "8%",
+    height: 60,
     justifyContent: "center",
     borderRadius: 10,
   },
@@ -399,24 +373,53 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 12,
     margin: 6,
-    borderRadius: 5
+    borderRadius: 5,
   },
   timeOption: {
     backgroundColor: "black",
     padding: 12,
     margin: 6,
-    borderRadius: 5
+    borderRadius: 5,
   },
   timeOptionChosenTxt: {
     fontSize: 16,
     color: "black",
-    fontFamily: "Manrope"
+    fontFamily: "Manrope",
   },
   timeOptionTxt: {
     fontSize: 16,
     color: "white",
-    fontFamily: "Manrope"
-  }
+    fontFamily: "Manrope",
+  },
+  chooseAlert: {
+    fontSize: 16,
+    color: "white",
+    fontFamily: "Manrope",
+    bottom: "30%",
+    // alignSelf: "center"
+  },
+  calendarTheme: {
+    calendarBackground: "black",
+    textDayFontFamily: "Manrope",
+    textMonthFontFamily: "Manrope",
+    textDayHeaderFontFamily: "Manrope",
+
+    dayTextColor: "white",
+    textDisabledColor: "#5c5c5c",
+    monthTextColor: "white",
+    textSectionTitleColor: "white",
+    dayTextColor: "white",
+    arrowColor: "white",
+    todayTextColor: "white",
+
+    textSectionTitleDisabledColor: "#d9e1e8",
+    selectedDayBackgroundColor: "white",
+    selectedDayTextColor: "black",
+
+    textDayFontSize: 16,
+    textMonthFontSize: 20,
+    textDayHeaderFontSize: 12,
+  },
 });
 
 export default EnrollmentModal;

@@ -38,15 +38,17 @@ const AddServiceModal = () => {
     >
       <StatusBar backgroundColor="white" />
       <View style={styles.container}>
+        {servicesToChoose.length > 0 ? 
         <FlatList
-            contentContainerStyle={styles.list}
-            data={servicesToChoose}
-            // extraData={filterText}
-            renderItem={({ item }) => (
-               <Service {...item} />
-            )}
-            ItemSeparatorComponent={() => <View style={{height: "8%"}} />}
-            />
+        contentContainerStyle={styles.list}
+        data={servicesToChoose}
+        // extraData={filterText}
+        renderItem={({ item }) => (
+           <Service {...item} />
+        )}
+        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        /> :
+        <Text style={styles.txt}>Не найдены услуги для добавления</Text>}
       </View>
     </Modal>
   );
@@ -55,14 +57,21 @@ const AddServiceModal = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
     // justifyContent: "space-between",
     backgroundColor: "#202124",
-    alignItems: "center",
+    // alignItems: "center",
   },
   list: {
-    top: "4%"
-  }
+    top: "4%",
+  },
+  txt: {
+    fontSize: 18,
+    color: "white",
+    fontFamily: "Manrope",
+    marginTop: "20%",
+    alignSelf: "center",
+    top: "30%"
+  },
 });
 
 export default AddServiceModal;

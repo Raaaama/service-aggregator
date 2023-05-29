@@ -19,13 +19,13 @@ import Carousel from "react-native-reanimated-carousel";
 import Svg, { Path } from "react-native-svg";
 
 const ChosenService = (props) => {
-  const { chosenServiceTypes, providerServices } = useContext(LogInContext);
+  const { chosenServiceTypes, setChosenServiceTypes, providerServices, chosenOptions, setChosenOptions, options, setOptions } = useContext(LogInContext);
 
   //   console.log("chosenServiceTypes");
   //   console.log(chosenServiceTypes);
   //   console.log("providerServices");
   //   console.log(providerServices);
-  let st = props.st;
+  let st = props.st, number = props.number;
 //   console.log(st)
 
   let service = {};
@@ -38,10 +38,31 @@ const ChosenService = (props) => {
     }
   }
 
+  function deleteChosenService() {
+    setChosenServiceTypes(chosenServiceTypes.filter(item => item !== st))
+    for (let i = 0; i < options.length; i++) {
+      if (options[i][0].idservice_type === st) {
+        console.log(options.filter(item => item !== options[i]))
+        let temp = options.filter(item => item !== options[i])
+        setOptions(temp)
+        // console.log(temp)
+        // console.log("------------------------------------")
+        break
+      }
+      // console.log("-----")
+    }
+  }
+
 
   return (
     <View style={styles.serviceInfo}>
-      <Text style={styles.infoTitle}>{service.name}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.infoTitle}>{"#" + (number + 1)}</Text>
+        <Text style={styles.infoTitle}>{service.name}</Text>
+        <TouchableOpacity style={styles.infoTitleBtn} onPress={() => deleteChosenService()}>
+          <Text style={styles.infoTitle}>x</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.timePerServiceView}>
         <Svg
           xmlns="http://www.w3.org/2000/svg"
@@ -137,12 +158,25 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 20,
     borderRadius: 5,
+    marginTop: "2%"
+  },
+  titleContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row"
+  },
+  infoTitleBtn: {
+    // backgroundColor: "green",
+    borderRadius: 40,
+    width: "10%",
+    // aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   infoTitle: {
     fontSize: 20,
     color: "white",
     fontFamily: "Manrope",
-    alignSelf: "center",
+    // alignSelf: "center",
   },
   timePerServiceView: {
     flexDirection: "row",

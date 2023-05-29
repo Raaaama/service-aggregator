@@ -38,7 +38,7 @@ const Service = (props) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: "100%",
+    width: "90%",
     alignSelf: "center",
     backgroundColor: "black",
     padding: 20,

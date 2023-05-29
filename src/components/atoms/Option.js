@@ -15,13 +15,16 @@ const Option = (props) => {
     setChosenServiceTypes,
     setAddServiceModalVisible,
     chosenOptions,
-    chosenServiceTypes
+    chosenServiceTypes,
+    timeOptions,
+    setTimeOptions,
+    optionData, setOptionData
   } = useContext(LogInContext);
 
   const [buttonText, setButtonText] = useState("Опция");
 
-  const options = props.item.item
-  const i = props.item.index
+  const options = props.item
+  const {i, date, dateTxt, getTO} = props
 
   function handleF(idst) {
     setChosenServiceTypes((current) => [...current, idst]);
@@ -36,20 +39,39 @@ const Option = (props) => {
     let chosen = options[index]
     chosenOptions[i] = chosen
 
-    console.log(chosenServiceTypes)
+    // console.log(chosenOptions)
 
+    // console.log(i)
+    // console.log(i,chosen.idoption,dateTxt,date)
+    if (dateTxt != undefined) {
+      getTO(i,chosen.idoption,dateTxt,date)
+    }
+
+    
+
+    
+
+    // console.log(dateTxt,date)
+
+    // console.log(chosenServiceTypes)
 
     // console.log(options)
+    // console.log(chosenOptions)
     // setOptionIsPicked(true);
     // setOptionPicked(options[index].idoption);
     // handleTimetable(options[index].idoption, undefined, undefined);
+    // setTimeOptions(timeOptions)
   }
 
   let data = [];
   // console.log("---------------------------------------------------")
   // console.log(props)
   options.forEach((element) => {
-    data.push(element.opt);
+    let temp = element.opt
+    if (element.rating_number > 0) {
+      temp = temp + " ★" + element.rating + "(" + element.rating_number + ")"
+    }
+    data.push(temp);
   });
 
   return (
@@ -72,7 +94,7 @@ const Option = (props) => {
       buttonStyle={{
         width: "60%",
         backgroundColor: "black",
-        alignSelf: "center"
+        alignSelf: "center",
       }}
       buttonTextStyle={{
         fontFamily: "Manrope",
@@ -108,42 +130,6 @@ const Option = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    // justifyContent: "space-between",
-    backgroundColor: "#202124",
-    alignItems: "center",
-  },
-  calendar: {
-    flex: 1,
-    marginTop: "auto",
-    backgroundColor: "white",
-    borderTopColor: "black",
-    borderTopWidth: 1,
-  },
-  selectTime: {
-    flex: 1,
-    width: "90%",
-
-    backgroundColor: "green",
-  },
-  enrollBtn: {
-    // marginTop: "20%",
-    position: "absolute",
-    bottom: "2%",
-    backgroundColor: "black",
-    width: "80%",
-    height: "8%",
-    justifyContent: "center",
-    borderRadius: 10,
-  },
-  enrollTxt: {
-    fontSize: 18,
-    color: "white",
-    fontFamily: "Manrope",
-    alignSelf: "center",
-  },
   timeOptionChosen: {
     backgroundColor: "white",
     padding: 12,
@@ -155,16 +141,6 @@ const styles = StyleSheet.create({
     padding: 12,
     margin: 6,
     borderRadius: 5,
-  },
-  timeOptionChosenTxt: {
-    fontSize: 16,
-    color: "black",
-    fontFamily: "Manrope",
-  },
-  timeOptionTxt: {
-    fontSize: 16,
-    color: "white",
-    fontFamily: "Manrope",
   },
 });
 

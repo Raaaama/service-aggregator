@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const LogInContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [ip, setIp] = useState("https://c1cf-2-135-26-114.ngrok-free.app");
+  const [ip, setIp] = useState("https://d652-2-135-26-114.ngrok-free.app");
   const [uid, setUid] = useState("");
   const [emadress, setEmadress] = useState("");
   const [password, setPassword] = useState("");
@@ -124,6 +124,8 @@ export const AppProvider = ({ children }) => {
 
   const [chosenOptions, setChosenOptions] = useState([])
 
+  const [chosenDates, setChosenDates] = useState([])
+
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -214,7 +216,10 @@ export const AppProvider = ({ children }) => {
     return a
   }
 
-  const getTO = async (id, day, date) => {
+  const [optionData, setOptionData] = useState([undefined, undefined])
+
+  const getTO = async (number, id, day, date) => {
+    console.log(number, id, day, date)
     let temp = date + "T00:00:00";
     temp = new Date(temp);
 
@@ -236,6 +241,7 @@ export const AppProvider = ({ children }) => {
         )
           .then((response) => response.json())
           .then((data) => {
+
             let busy = [];
             let busyTime;
             for (let i = 0; i < json.length; i++) {
@@ -257,13 +263,18 @@ export const AppProvider = ({ children }) => {
                 if (currentDate == from) {
                   if (currentTime < time) {
                     temp.push(time.substring(0, 5));
+                    
                   }
                 } else {
                   temp.push(time.substring(0, 5));
+                  
                 }
               }
               while (true) {
                 time = addMinutes(time, 30);
+                if (time.length == 4) {
+                  time = "0" + time
+                }
                 if (time + ":00" < data[i].endTime) {
                   if (!busy.includes(time)) {
                     if (currentDate == from) {
@@ -289,9 +300,33 @@ export const AppProvider = ({ children }) => {
               });
             });
 
-            setTimeOptions(ops);
-          });
-      });
+            let tempTO = []
+            tempTO.length = timeOptions.length
+            for (let i = 0; i < timeOptions.length; i++) {
+              tempTO[i] = timeOptions[i]
+            }
+            tempTO[number] = ops
+
+
+            // console.log("     ")
+            // console.log(number)
+            // console.log(JSON.stringify(timeOptions[number]))
+            // console.log(JSON.stringify(tempTO[number]))
+            // if (JSON.stringify(timeOptions[number]) === JSON.stringify(tempTO[number])) {
+            //   console.log("no need to change")
+            // }
+            // else {
+            //   setTimeOptions(tempTO);
+            // }
+            setTimeOptions(tempTO);
+            // const tempTO = [...timeOptions]
+            // tempTO[number] = ops
+
+            // console.log(ops)
+
+            // console.log(tempTO)
+          }).catch((e) => (console.log(e)))
+      }).catch((e) => (console.log(e)))
   };
 
   const [userEnrollments, setUserEnrollments] = useState([]);
@@ -327,6 +362,9 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  //pages
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   return (
     <LogInContext.Provider
       value={{
@@ -337,7 +375,7 @@ export const AppProvider = ({ children }) => {
         serviceTypeModalVisible, setServiceTypeModalVisible, serviceTypes, getServiceTypes, serviceTypeTitle, setServiceTypeTitle, currentServiceType, setCurrentServiceType, chooseMultiple, setChooseMultiple,
         providersModalVisible, setProvidersModalVisible, providers, setProviders, getProviders, providersTitle, setProvidersTitle,
         providerPageModalVisible, setProviderPageModalVisible, images, getImages, providerInfo, setProviderInfo, getProviderInfo, 
-        enrollmentModalVisible, setEnrollmentModalVisible, options, getOptions, timeOptions, enroll, getTO,
+        enrollmentModalVisible, setEnrollmentModalVisible, options, setOptions, getOptions, timeOptions, enroll, getTO,
         userEnrollments, getUserEnrollments,
         emadress, setEmadress, password, setPassword, 
         profileChosen, SetProfileChosen, homeChosen, SetHomeChosen, searchChosen, SetSearchChosen, setTimeOptions,
@@ -345,7 +383,10 @@ export const AppProvider = ({ children }) => {
         chosenServiceTypes, setChosenServiceTypes, 
         providerServices, setProviderServices, getProviderServices,
         addServiceModalVisible,setAddServiceModalVisible,
-        chosenOptions, setChosenOptions
+        chosenOptions, setChosenOptions,
+        optionData, setOptionData,
+        currentIndex, setCurrentIndex,
+        chosenDates, setChosenDates
       }}
     >
       {children}

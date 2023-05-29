@@ -12,7 +12,7 @@ import { useState } from "react";
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="black" />
+      <StatusBar backgroundColor="white" />
       <CategoriesList />
       <LogInModal />
       <ServiceTypeModal />
