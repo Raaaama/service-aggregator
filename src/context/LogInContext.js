@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 const LogInContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [ip, setIp] = useState("https://d652-2-135-26-114.ngrok-free.app");
+  const [ip, setIp] = useState("http://78.40.109.236:8082");
   const [uid, setUid] = useState("");
   const [emadress, setEmadress] = useState("");
   const [password, setPassword] = useState("");

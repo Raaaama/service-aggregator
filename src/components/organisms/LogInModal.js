@@ -45,7 +45,7 @@ const LogInModal = (props) => {
       animationType="slide"
       visible={LogInModalVisible}
       presentationStyle={"fullScreen"}
-      onRequestClose={() => setLogInModalVisible(false)}
+      // onRequestClose={() => setLogInModalVisible(false)}
     >
       <SignUpModal vb={signUpModalVisible} handleSignUp={setSignUpModalVisible}/>
       <StatusBar backgroundColor="white" />

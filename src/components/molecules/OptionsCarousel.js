@@ -41,6 +41,8 @@ const OptionsCarousel = (props) => {
     // handleTimetable(optionData[0],optionData[1],dateTxt,date)
     // console.log(chosenOptions)
 
+    // console.log(chosenOptions)
+
     
     // if (chosenOptions[pageNum] != undefined) {
     //   getTO(pageNum,chosenOptions[pageNum].idoption,dateTxt,date)
@@ -86,24 +88,28 @@ const OptionsCarousel = (props) => {
               getTO={getTO}
               index={index}
             />
-            {item.timeOptions != undefined ? <FlatList
-              contentContainerStyle={styles.timeOptionsContainer}
-              // style={{width:"90%"}}
-              data={item.timeOptions}
-              key={index}
-              numColumns={5}
-              directionalLockEnabled={true}
-              alwaysBounceVertical={false}
-              extraData={[data, ed]}
-              renderItem={({ item }) => (
-                item.timeOptions == undefined ?
-                <TouchableOpacity style={item.chosen ? styles.timeOptionChosen : styles.timeOption} onPress={()=> itemChosen(index, item)}>
-                  <Text key={item.time} style={item.chosen ? styles.timeOptionChosenTxt : styles.timeOptionTxt}>{item.time}</Text>
-                </TouchableOpacity>
-                :
-                <Text>Нет доступного времени на запись</Text>
-              )}
-            /> :
+            {item.timeOptions != undefined ? 
+              item.timeOptions.length > 0 ?
+                <FlatList
+                contentContainerStyle={styles.timeOptionsContainer}
+                // style={{width:"90%"}}
+                data={item.timeOptions}
+                key={index}
+                numColumns={5}
+                directionalLockEnabled={true}
+                alwaysBounceVertical={false}
+                extraData={[data, ed]}
+                renderItem={({ item }) => (
+                  <TouchableOpacity style={item.chosen ? styles.timeOptionChosen : styles.timeOption} onPress={()=> itemChosen(index, item)}>
+                    <Text key={item.time} style={item.chosen ? styles.timeOptionChosenTxt : styles.timeOptionTxt}>{item.time}</Text>
+                  </TouchableOpacity>
+                  // :
+                  // <Text>Нет доступного времени на запись</Text>
+                )}
+              /> :
+                  <Text style={styles.txt}>Нет доступного времени для записи</Text>
+
+             :
             <Text style={styles.txt}>Выберите дату и доступную опцию</Text>}
             
           </View>

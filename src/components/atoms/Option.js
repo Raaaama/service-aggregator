@@ -14,9 +14,11 @@ const Option = (props) => {
     getProviderServices,
     setChosenServiceTypes,
     setAddServiceModalVisible,
+    chosenDates,
     chosenOptions,
     chosenServiceTypes,
     timeOptions,
+    currentIndex,
     setTimeOptions,
     optionData, setOptionData
   } = useContext(LogInContext);
@@ -39,12 +41,23 @@ const Option = (props) => {
     let chosen = options[index]
     chosenOptions[i] = chosen
 
-    // console.log(chosenOptions)
+    // console.log("")
+    // console.log(index)
+    // console.log(chosenOptions[index])
+
+    // console.log(chosen)
 
     // console.log(i)
     // console.log(i,chosen.idoption,dateTxt,date)
-    if (dateTxt != undefined) {
-      getTO(i,chosen.idoption,dateTxt,date)
+    // console.log(i,chosen.idoption,dateTxt,date)
+    // console.log(chosenDates[currentIndex])
+    let dt = new Date(chosenDates[currentIndex]+'T00:00:00Z')
+
+    // console.log(timeOptions[currentIndex])
+    // console.log(dt.getDay() + 1)
+    if (dateTxt != undefined && date != undefined && chosenDates[currentIndex] != undefined) {
+      // getTO(i,chosenOptions[currentIndex].idoption,dateTxt,date)
+      getTO(i,chosen.idoption,dt.getDay() + 1,chosenDates[currentIndex])
     }
 
     
